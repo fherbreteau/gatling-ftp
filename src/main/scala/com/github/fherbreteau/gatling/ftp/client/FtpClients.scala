@@ -1,10 +1,10 @@
 package com.github.fherbreteau.gatling.ftp.client
 
 import com.github.fherbreteau.gatling.ftp.protocol.FtpProtocol
-import io.gatling.core.session.{Session, SessionPrivateAttributes}
+import io.gatling.core.session.Session
 
 object FtpClients {
-  private val exchange: String = SessionPrivateAttributes.PrivateAttributePrefix + "exchange"
+  private val exchange: String = "sftp.exchange"
 
   def setFtpClient(ftpProtocol: FtpProtocol): Session => Session =
     session => {
