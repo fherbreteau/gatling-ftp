@@ -4,7 +4,7 @@
 
     <groupId>com.github.fherbreteau</groupId>
     <artifactId>gatling-ftp</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <description>FTP plugin for Gatling 3.7.x</description>
 
     <properties>
