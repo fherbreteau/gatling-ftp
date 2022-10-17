@@ -1,6 +1,6 @@
 # Gatling FTP Plugin
 
-![Build](https://github.com/fherbreteau/gatling-ftp/workflows/Build/badge.svg)
+![Build](https://github.com/fherbreteau/gatling-ftp/actions/workflows/maven.yml/badge.svg)
 
 Plugin for support performance testing with FTP in Gatling (3.8.x)
 
