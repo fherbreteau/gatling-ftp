@@ -8,6 +8,7 @@ import io.gatling.core.CoreComponents
 import io.gatling.core.session.Session
 import io.gatling.core.stats.StatsEngine
 
+import java.util.concurrent.{Executor, Executors}
 import scala.util.control.NonFatal
 
 object Exchange  {
@@ -17,14 +18,16 @@ object Exchange  {
       factory = FtpClientFactory(),
       server = server,
       port = port,
-      credentials = credentials
+      credentials = credentials,
+      executor = Executors.newSingleThreadExecutor()
     )
 }
 
 final case class Exchange(factory: FtpClientFactory,
                           server: String,
                           port: Int,
-                          credentials: Credentials) extends StrictLogging {
+                          credentials: Credentials,
+                          executor: Executor) extends StrictLogging {
   def execute(transaction: FtpTransaction, coreComponents: CoreComponents): Unit = {
     logger.debug(s"Sending operation=${transaction.fullRequestName} server=${transaction.server} scenario=${transaction.scenario} userId=${transaction.userId}")
     coreComponents.throttler match {
@@ -36,7 +39,11 @@ final case class Exchange(factory: FtpClientFactory,
     }
   }
 
-  private def executeOperation(transaction: FtpTransaction, coreComponents: CoreComponents): Unit = {
+  private def executeOperation(transaction: FtpTransaction, components: CoreComponents): Unit = {
+    executor.execute(() => executeOperationAsync(transaction, components))
+  }
+
+  private def executeOperationAsync(transaction: FtpTransaction, coreComponents: CoreComponents): Unit = {
     import coreComponents._
     val startTime = clock.nowMillis
     val client = factory.createClient(transaction, server, port)
