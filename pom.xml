@@ -103,9 +103,9 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:${project.scm.url}</connection>
-        <developerConnection>scm:git:${project.scm.url}</developerConnection>
-        <url>https://github.com/fherbreteau/gatling-ftp.git</url>
+        <connection>scm:git:${project.scm.url}.git</connection>
+        <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
+        <url>https://github.com/fherbreteau/gatling-ftp</url>
         <tag>HEAD</tag>
     </scm>
 
