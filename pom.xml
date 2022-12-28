@@ -20,6 +20,10 @@
 
         <gatling.version>3.9.0</gatling.version>
         <commons.net.version>3.9.0</commons.net.version>
+
+        <sonar.organization>fherbreteau</sonar.organization>
+        <sonar.projectKey>fherbreteau_gatling-ftp</sonar.projectKey>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>
