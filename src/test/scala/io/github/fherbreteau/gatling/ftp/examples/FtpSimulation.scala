@@ -15,8 +15,8 @@ class FtpSimulation extends Simulation {
     .server("localhost")
     .port(2222)
     .credentials("user", "password")
-    .localSourcePath(Paths.get("./src/test/resources/data"))
-    .remoteSourcePath(Paths.get("/tmp"))
+    .localPath(Paths.get("./src/test/resources/data"))
+    .remotePath("/tmp")
 
   val scn: ScenarioBuilder = scenario("SFTP Scenario")
     .exec(
@@ -24,10 +24,10 @@ class FtpSimulation extends Simulation {
         .upload("file_to_upload"))
     .exec(
       ftp("Move remote file")
-        .copy("file_to_upload"))
+        .move("file_to_upload", "file_moved"))
     .exec(
       ftp("Delete remote file")
-        .delete("file_to_upload")
+        .delete("file_moved")
     )
 
   setUp(scn.inject(atOnceUsers(1)).protocols(ftpProtocol))

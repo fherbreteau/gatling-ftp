@@ -2,12 +2,13 @@ package io.github.fherbreteau.gatling.ftp.client
 
 import com.typesafe.scalalogging.StrictLogging
 import io.gatling.commons.model.Credentials
-import io.gatling.commons.stats.KO
+import io.gatling.commons.stats.{KO, OK}
 import io.gatling.core.CoreComponents
 import io.gatling.core.session.Session
 import io.gatling.core.stats.StatsEngine
-import io.github.fherbreteau.gatling.ftp.client.result.{FtpFailure, FtpResult}
+import io.github.fherbreteau.gatling.ftp.client.result.{FtpFailure, FtpResponse, FtpResult}
 
+import java.io.IOException
 import java.util.concurrent.{Executor, Executors}
 import scala.util.control.NonFatal
 
@@ -46,26 +47,34 @@ final case class Exchange(factory: FtpClientFactory,
   private def executeOperationAsync(transaction: FtpTransaction, coreComponents: CoreComponents): Unit = {
     import coreComponents._
     val startTime = clock.nowMillis
-    val client = factory.createClient(transaction, server, port)
     val result = try {
-      logger.debug(s"Creating New Session scenario=${transaction.scenario} userId=${transaction.userId}")
-      client.connect(server, port)
-      if (!client.login(credentials.username, credentials.password)) {
-        FtpFailure(transaction.action, startTime, clock.nowMillis, "Failed to login to server", KO)
-      } else {
-        logger.debug(s"Executing required operation scenario=${transaction.scenario} userId=${transaction.userId}")
-        val result = transaction.ftpOperation.build.apply(client, startTime, clock)
+      val client = factory.createClient(transaction, server, port)
+      try {
+        logger.debug(s"Creating New Session scenario=${transaction.scenario} userId=${transaction.userId}")
+        client.connect(server, port)
+        if (!client.login(credentials.username, credentials.password))
+          throw new IOException("Failed to login to server")
+
+        logger.debug(s"Creating operation=${transaction.ftpOperation.operationName} scenario=${transaction.scenario} userId=${transaction.userId}")
+        val executor = transaction.ftpOperation.build
+        logger.debug(s"Executing operation=${transaction.ftpOperation.operationName} scenario=${transaction.scenario} userId=${transaction.userId}")
+        executor.apply(client)
+        logger.debug(s"Action ${transaction.action} successful")
+        FtpResponse(transaction.action, startTime, clock.nowMillis, OK)
+      } catch {
+        case NonFatal(t) =>
+          logger.error(s"Failed to execute action ${transaction.action}", t)
+          FtpFailure(transaction.action, startTime, clock.nowMillis, t.getMessage, KO)
+      } finally {
         if (!client.logout()) {
           FtpFailure(transaction.action, startTime, clock.nowMillis, "Failed to loggout from server", KO)
         }
-        result
+        factory.removeClient(transaction)
       }
     } catch {
       case NonFatal(t) =>
-        logger.error(s"Failed to execute action ${transaction.action}", t)
+        logger.error(s"Failed to create FTP client", t)
         FtpFailure(transaction.action, startTime, clock.nowMillis, t.getMessage, KO)
-    } finally {
-      factory.removeClient(transaction)
     }
     logger.debug(s"Ftp Operation completed scenario=${transaction.scenario} userId=${transaction.userId}")
     logResult(statsEngine, transaction.session, transaction.fullRequestName, result)

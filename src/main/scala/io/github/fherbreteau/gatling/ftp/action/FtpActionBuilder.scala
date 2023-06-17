@@ -10,7 +10,8 @@ import io.github.fherbreteau.gatling.ftp.client.{FtpOperationBuilder, FtpOperati
 import io.github.fherbreteau.gatling.ftp.protocol.{FtpComponents, FtpProtocol}
 
 case class FtpActionBuilder(operationName: Expression[String],
-                            file: Expression[String],
+                            source: Expression[String],
+                            destination: Expression[String],
                             action: FtpClientAction) extends ActionBuilder {
   override def build(ctx: ScenarioContext, next: Action): Action = {
     val ftpComponents = lookUpSftpComponents(ctx.protocolComponentsRegistry)
@@ -19,7 +20,7 @@ case class FtpActionBuilder(operationName: Expression[String],
   }
 
   private def build(ftpProtocol: FtpProtocol, throttled: Boolean): FtpOperationDef = {
-    val resolvedOperationExpression = new FtpOperationBuilder(operationName, file, action).build
+    val resolvedOperationExpression = new FtpOperationBuilder(operationName, source, destination, action).build
     FtpOperationDef(
       operationName,
       resolvedOperationExpression,

@@ -1,5 +1,7 @@
 package io.github.fherbreteau.gatling.ftp.examples;
 
+import io.gatling.app.Gatling;
+import io.gatling.core.config.GatlingPropertiesBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.github.fherbreteau.gatling.ftp.javaapi.protocol.FtpProtocolBuilder;
@@ -16,18 +18,23 @@ public class FtpSimulation2 extends Simulation {
             .server("localhost")
             .port(2222)
             .credentials("user", "password")
-            .localSourcePath(Paths.get("./src/test/resources/data"))
-            .remoteSourcePath(Paths.get("/tmp"));
+            .localPath(Paths.get("./src/test/resources/data"))
+            .remotePath("/tmp");
 
-    ScenarioBuilder scn = scenario("SFTP Scenario")
+    ScenarioBuilder scn = scenario("FTP Scenario")
             .exec(ftp("Upload a file")
                     .upload("file_to_upload"))
             .exec(ftp("Move remote file")
-                    .copy("file_to_upload"))
+                    .move("file_to_upload", "file_moved"))
             .exec(ftp("Delete remote file")
-                    .delete("file_to_upload"));
+                    .delete("file_moved"));
 
     {
         setUp(scn.injectOpen(atOnceUsers(1)).protocols(ftpProtocol));
+    }
+
+    public static void main(String[] args) {
+        int exitCode = Gatling.fromMap(new GatlingPropertiesBuilder().simulationClass(FtpSimulation2.class.getName()).build());
+        System.exit(exitCode);
     }
 }

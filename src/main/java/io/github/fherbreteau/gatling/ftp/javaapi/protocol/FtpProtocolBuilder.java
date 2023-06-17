@@ -25,6 +25,10 @@ public class FtpProtocolBuilder implements ProtocolBuilder {
         return new FtpProtocolBuilder(wrapped.credentials(username, password));
     }
 
+    public FtpProtocolBuilder localPath(Path path) {
+        return localSourcePath(path).localDestinationPath(path);
+    }
+
     public FtpProtocolBuilder localSourcePath(Path sourcePath) {
         return new FtpProtocolBuilder(wrapped.localSourcePath(sourcePath));
     }
@@ -33,11 +37,15 @@ public class FtpProtocolBuilder implements ProtocolBuilder {
         return new FtpProtocolBuilder(wrapped.localDestinationPath(destpath));
     }
 
-    public FtpProtocolBuilder remoteSourcePath(Path sourcePath) {
+    public FtpProtocolBuilder remotePath(String path) {
+        return remoteSourcePath(path).remoteDestinationPath(path);
+    }
+
+    public FtpProtocolBuilder remoteSourcePath(String sourcePath) {
         return new FtpProtocolBuilder(wrapped.remoteSourcePath(sourcePath));
     }
 
-    public FtpProtocolBuilder remoteDestinationPath(Path destpath) {
+    public FtpProtocolBuilder remoteDestinationPath(String destpath) {
         return new FtpProtocolBuilder(wrapped.remoteDestinationPath(destpath));
     }
 
