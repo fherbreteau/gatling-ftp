@@ -4,6 +4,7 @@
 /.settings
 /*.bash_profile
 /*.springBeans
+/results/
 
 /**/target/
 /**/.settings/
