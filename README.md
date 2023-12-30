@@ -2,7 +2,7 @@
 ![Build](https://github.com/fherbreteau/gatling-ftp/actions/workflows/maven.yml/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fherbreteau_gatling-ftp&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=fherbreteau_gatling-ftp)
 
-Plugin for support performance testing with FTP in Gatling (3.9.x)
+Plugin for support performance testing with FTP in Gatling (3.10.x)
 
 # Usage
 
