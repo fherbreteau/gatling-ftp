@@ -1,8 +1,6 @@
 package io.github.fherbreteau.gatling.ftp.examples
 
-import io.gatling.app.Gatling
 import io.gatling.core.Predef._
-import io.gatling.core.config.GatlingPropertiesBuilder
 import io.gatling.core.structure.ScenarioBuilder
 import io.github.fherbreteau.gatling.ftp.Predef.ftp
 import io.github.fherbreteau.gatling.ftp.protocol.FtpProtocolBuilder
@@ -18,7 +16,7 @@ class FtpSimulation extends Simulation {
     .localPath(Paths.get("./src/test/resources/data"))
     .remotePath("/tmp")
 
-  val scn: ScenarioBuilder = scenario("SFTP Scenario")
+  val scn: ScenarioBuilder = scenario("FTP Scenario")
     .exec(
       ftp("Upload a file")
         .upload("file_to_upload"))
@@ -31,10 +29,4 @@ class FtpSimulation extends Simulation {
     )
 
   setUp(scn.inject(atOnceUsers(1)).protocols(ftpProtocol))
-}
-
-object SftpSimulation {
-  def main(args: Array[String]): Unit =
-    Gatling.fromMap((new GatlingPropertiesBuilder)
-      .simulationClass(classOf[FtpSimulation2].getName).build)
 }
