@@ -24,8 +24,9 @@
         <maven-deploy-plugin.version>1.7.0</maven-deploy-plugin.version>
         <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
 
-        <gatling.version>3.11.5</gatling.version>
+        <gatling.version>3.12.0</gatling.version>
         <commons.net.version>3.11.1</commons.net.version>
+        <quicklens.version>1.9.7</quicklens.version>
 
         <sonar.organization>fherbreteau</sonar.organization>
         <sonar.projectKey>fherbreteau_gatling-ftp</sonar.projectKey>
@@ -52,6 +53,11 @@
             <version>${commons.net.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.softwaremill.quicklens</groupId>
+            <artifactId>quicklens_2.13</artifactId>
+            <version>${quicklens.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
