@@ -1,6 +1,6 @@
 package io.github.fherbreteau.gatling.ftp.protocol
 
-import com.softwaremill.quicklens.ModifyPimp
+import io.gatling.internal.quicklens._
 import io.gatling.commons.model.Credentials
 import io.gatling.core.config.GatlingConfiguration
 
