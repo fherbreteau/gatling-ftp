@@ -1,12 +1,12 @@
 ---
-version: "2.1"
 services:
-  openssh-server:
+  ftp:
     image: delfer/alpine-ftp-server:latest
     container_name: ftp-server
     hostname: ftp-server #optional
     environment:
       - USERS=user|password
     ports:
-      - 21:2121
+      - "21:21"
+      - "30000-30009:30000-30009"  # passive data ports
     restart: unless-stopped

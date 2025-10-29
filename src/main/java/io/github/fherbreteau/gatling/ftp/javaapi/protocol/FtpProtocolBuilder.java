@@ -25,6 +25,14 @@ public class FtpProtocolBuilder implements ProtocolBuilder {
         return new FtpProtocolBuilder(wrapped.credentials(username, password));
     }
 
+    public FtpProtocolBuilder passiveMode(boolean passive) {
+        return new FtpProtocolBuilder(wrapped.passiveMode(passive));
+    }
+
+    public FtpProtocolBuilder protocolLogging(boolean enable) {
+        return new FtpProtocolBuilder(wrapped.protocolLogging(enable));
+    }
+
     public FtpProtocolBuilder localPath(Path path) {
         return localSourcePath(path).localDestinationPath(path);
     }

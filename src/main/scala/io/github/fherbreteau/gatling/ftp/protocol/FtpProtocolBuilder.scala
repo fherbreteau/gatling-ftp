@@ -21,6 +21,10 @@ final case class FtpProtocolBuilder(protocol: FtpProtocol) {
 
   def credentials(username: String, password: String): FtpProtocolBuilder = this.modify(_.protocol.exchange.credentials).setTo(Credentials(username, password))
 
+  def passiveMode(passive: Boolean): FtpProtocolBuilder = this.modify(_.protocol.exchange.passiveMode).setTo(passive)
+
+  def protocolLogging(enable: Boolean): FtpProtocolBuilder = this.modify(_.protocol.exchange.protocolLogging).setTo(enable)
+
   def localPath(path: Path): FtpProtocolBuilder = this.localSourcePath(path).localDestinationPath(path)
 
   def localSourcePath(sourcePath: Path): FtpProtocolBuilder = this.modify(_.protocol.localSourcePath).setTo(Some(sourcePath))

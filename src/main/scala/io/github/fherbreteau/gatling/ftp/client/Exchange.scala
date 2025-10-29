@@ -8,19 +8,22 @@ import io.gatling.core.CoreComponents
 import io.gatling.core.session.Session
 import io.gatling.core.stats.StatsEngine
 import io.github.fherbreteau.gatling.ftp.client.result.{FtpFailure, FtpResponse, FtpResult}
+import org.apache.commons.net.PrintCommandListener
 
-import java.io.IOException
+import java.io.{IOException, PrintWriter}
 import java.util.concurrent.{Executor, Executors}
 import scala.util.control.NonFatal
 
 object Exchange  {
 
-  def apply(server: String, port: Int, credentials: Credentials): Exchange =
+  def apply(server: String, port: Int, credentials: Credentials, passiveMode: Boolean = false, protocolLogging: Boolean = false): Exchange =
     Exchange(
       factory = FtpClientFactory(),
       server = server,
       port = port,
       credentials = credentials,
+      passiveMode = passiveMode,
+      protocolLogging = protocolLogging,
       executor = Executors.newSingleThreadExecutor()
     )
 }
@@ -29,6 +32,8 @@ final case class Exchange(factory: FtpClientFactory,
                           server: String,
                           port: Int,
                           credentials: Credentials,
+                          passiveMode: Boolean,
+                          protocolLogging: Boolean,
                           executor: Executor) extends StrictLogging {
   def execute(transaction: FtpTransaction, coreComponents: CoreComponents): Unit = {
     logger.debug(s"Sending operation=${transaction.fullRequestName} server=${transaction.server} scenario=${transaction.scenario} userId=${transaction.userId}")
@@ -54,8 +59,19 @@ final case class Exchange(factory: FtpClientFactory,
       try {
         logger.debug(s"Creating New Session scenario=${transaction.scenario} userId=${transaction.userId}")
         client.connect(server, port)
+
+        if (protocolLogging) {
+          // Mask login details in logs (2nd parameter = suppressLogin)
+          client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true))
+        }
+
         if (!client.login(credentials.username, credentials.password))
           throw new IOException("Failed to login to server")
+
+        if (passiveMode) {
+          logger.debug(s"Entering FTP passive mode scenario=${transaction.scenario} userId=${transaction.userId}")
+          client.enterLocalPassiveMode()
+        }
 
         logger.debug(s"Creating operation=${transaction.ftpOperation.operationName} scenario=${transaction.scenario} userId=${transaction.userId}")
         val executor = transaction.ftpOperation.build
