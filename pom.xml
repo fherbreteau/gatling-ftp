@@ -22,7 +22,7 @@
         <maven-scala-plugin.version>4.9.5</maven-scala-plugin.version>
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
         <maven-deploy-plugin.version>1.7.0</maven-deploy-plugin.version>
-        <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
+        <maven-release-plugin.version>3.2.0</maven-release-plugin.version>
 
         <gatling.version>3.14.3</gatling.version>
         <commons.net.version>3.12.0</commons.net.version>
