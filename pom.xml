@@ -26,6 +26,7 @@
 
         <gatling.version>3.14.9</gatling.version>
         <commons.net.version>3.12.0</commons.net.version>
+        <jakarta.annotation.version>3.0.0</jakarta.annotation.version>
 
         <sonar.organization>fherbreteau</sonar.organization>
         <sonar.projectKey>fherbreteau_gatling-ftp</sonar.projectKey>
@@ -45,13 +46,19 @@
             <version>${gatling.version}</version>
         </dependency>
 
+        <!-- Jakarta Annotations -->
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>${jakarta.annotation.version}</version>
+        </dependency>
+
         <!-- Apache Net -->
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
             <version>${commons.net.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>
