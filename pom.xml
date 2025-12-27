@@ -14,9 +14,8 @@
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
         <maven-scala-plugin.version>4.9.7</maven-scala-plugin.version>
@@ -24,8 +23,9 @@
         <maven-deploy-plugin.version>1.7.0</maven-deploy-plugin.version>
         <maven-release-plugin.version>3.2.0</maven-release-plugin.version>
 
-        <gatling.version>3.14.3</gatling.version>
+        <gatling.version>3.14.9</gatling.version>
         <commons.net.version>3.12.0</commons.net.version>
+        <jakarta.annotation.version>3.0.0</jakarta.annotation.version>
 
         <sonar.organization>fherbreteau</sonar.organization>
         <sonar.projectKey>fherbreteau_gatling-ftp</sonar.projectKey>
@@ -45,13 +45,19 @@
             <version>${gatling.version}</version>
         </dependency>
 
+        <!-- Jakarta Annotations -->
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>${jakarta.annotation.version}</version>
+        </dependency>
+
         <!-- Apache Net -->
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
             <version>${commons.net.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>

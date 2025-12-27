@@ -6,7 +6,7 @@ import io.gatling.javaapi.core.internal.Expressions;
 import io.github.fherbreteau.gatling.ftp.javaapi.action.FtpActionBuilder;
 import scala.Function1;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.function.Function;
 
 public class Ftp {
