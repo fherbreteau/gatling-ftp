@@ -5,7 +5,7 @@
 
     <groupId>io.github.fherbreteau</groupId>
     <artifactId>gatling-ftp</artifactId>
-    <version>0.0.9</version>
+    <version>0.0.10-SNAPSHOT</version>
     <name>FTP plugin</name>
     <description>FTP plugin for Gatling</description>
     <url>${project.scm.url}</url>
@@ -226,7 +226,7 @@
         <connection>scm:git:${project.scm.url}.git</connection>
         <developerConnection>scm:git:${project.scm.url}.git</developerConnection>
         <url>https://github.com/fherbreteau/gatling-ftp</url>
-        <tag>0.0.9</tag>
+        <tag>@{project.version}</tag>
     </scm>
 
     <licenses>
