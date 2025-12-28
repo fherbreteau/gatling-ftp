@@ -2,9 +2,11 @@ package io.github.fherbreteau.gatling.ftp.protocol
 
 import com.typesafe.scalalogging.StrictLogging
 import io.gatling.commons.model.Credentials
+import io.gatling.commons.validation.Failure
 import io.gatling.core.CoreComponents
 import io.gatling.core.config.GatlingConfiguration
 import io.gatling.core.protocol.{Protocol, ProtocolKey}
+import io.gatling.core.session.{Expression, Session}
 import io.github.fherbreteau.gatling.ftp.client.Exchange
 
 import java.nio.file.{Path, Paths}
@@ -28,9 +30,9 @@ object FtpProtocol extends StrictLogging {
     new FtpProtocol(
       exchange = Exchange(
         server = "localhost",
-        port = 22,
-        credentials = Credentials("", "")
+        port = 22
       ),
+      credentials = (_: Session) => Failure("unauthenticated"),
       localSourcePath = None,
       localDestinationPath = None,
       remoteSourcePath = None,
@@ -39,6 +41,7 @@ object FtpProtocol extends StrictLogging {
 }
 
 final case class FtpProtocol(exchange: Exchange,
+                             credentials: Expression[Credentials],
                              localSourcePath: Option[Path],
                              localDestinationPath: Option[Path],
                              remoteSourcePath: Option[String],
@@ -54,11 +57,14 @@ final case class FtpProtocol(exchange: Exchange,
   }
 
   def remoteSource(file: String): String = {
-    remoteSourcePath.getOrElse(s"/home/${exchange.credentials.username}").concat("/").concat(file)
+    remoteSourcePath.getOrElse("").concat("/").concat(file)
   }
 
   def remoteDestination(file: String): String = {
-    remoteDestinationPath.getOrElse(s"/home/${exchange.credentials.username}").concat("/").concat(file)
+    remoteDestinationPath.getOrElse("").concat("/").concat(file)
   }
+
+  def credential(session: Session): Credentials =
+    credentials(session).toOption.get
 }
 

@@ -3,8 +3,8 @@ package io.github.fherbreteau.gatling.ftp.client
 import com.typesafe.scalalogging.{Logger, StrictLogging}
 import io.gatling.commons.model.Credentials
 import io.gatling.commons.stats.{KO, OK}
-import io.gatling.core.controller.throttle.Throttler
 import io.gatling.core.CoreComponents
+import io.gatling.core.controller.throttle.Throttler
 import io.gatling.core.session.Session
 import io.gatling.core.stats.StatsEngine
 import io.github.fherbreteau.gatling.ftp.client.result.{FtpFailure, FtpResponse, FtpResult}
@@ -27,12 +27,11 @@ object Exchange  {
     override def close(): Unit = {}
   }
 
-  def apply(server: String, port: Int, credentials: Credentials, passiveMode: Boolean = false, protocolLogging: Boolean = false): Exchange =
+  def apply(server: String, port: Int, passiveMode: Boolean = false, protocolLogging: Boolean = false): Exchange =
     Exchange(
       factory = FtpClientFactory(),
       server = server,
       port = port,
-      credentials = credentials,
       passiveMode = passiveMode,
       protocolLogging = protocolLogging,
       executor = Executors.newSingleThreadExecutor()
@@ -42,7 +41,6 @@ object Exchange  {
 final case class Exchange(factory: FtpClientFactory,
                           server: String,
                           port: Int,
-                          credentials: Credentials,
                           passiveMode: Boolean,
                           protocolLogging: Boolean,
                           executor: Executor) extends StrictLogging {
@@ -76,6 +74,7 @@ final case class Exchange(factory: FtpClientFactory,
           client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(new Exchange.DebugLoggerWriter(logger)), true))
         }
 
+        val credentials = transaction.ftpOperation.ftpProtocol.credential(transaction.session)
         if (!client.login(credentials.username, credentials.password))
           throw new IOException("Failed to login to server")
 

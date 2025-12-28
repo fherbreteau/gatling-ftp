@@ -5,10 +5,9 @@ import io.gatling.commons.validation.Validation
 import io.gatling.core.session.{Expression, Session}
 import io.github.fherbreteau.gatling.ftp.client.FtpActions.{Action, Copy, Delete, Download, Mkdir, Move, RmDir, Upload}
 import io.github.fherbreteau.gatling.ftp.protocol.FtpProtocol
-import org.apache.commons.net.ftp.{FTPClient, FTPReply}
-import org.apache.commons.net.io.Util
+import org.apache.commons.net.ftp.FTPClient
 
-import java.io.IOException
+import java.io.{File, FileInputStream, FileOutputStream, IOException}
 import java.nio.file.Files
 import scala.util.Using
 
@@ -43,20 +42,22 @@ final case class FtpOperation(operationName: String,
         }
       }
       case Copy => client => {
+        val tempFile = File.createTempFile("temp", ".bin")
+        logger.debug(s"Copying file $remoteSourcePath to $tempFile")
         Using.Manager { use =>
-          logger.debug(s"Copying file $remoteSourcePath to $remoteDestPath")
-          val source = use(client.retrieveFileStream(remoteSourcePath))
-          if (!FTPReply.isPositiveIntermediate(client.getReplyCode)) {
-            throw new IOException("Failed to retrieve source file stream")
-          }
-          val destination = use(client.storeFileStream(remoteDestPath))
-          if (!FTPReply.isPositiveIntermediate(client.getReplyCode)) {
-            throw new IOException("Failed to destination source file stream")
-          }
-          Util.copyStream(source, destination)
-          if (!client.completePendingCommand())
-            throw new IOException("Failed to copy file")
+          val tempStream = use(new FileOutputStream(tempFile))
+          if (!client.retrieveFile(remoteSourcePath, tempStream))
+            throw new IOException("Failed to download file")
+          logger.debug(s"file $remoteSourcePath copied to $tempFile")
         }
+        Using.Manager { use =>
+          logger.debug(s"Copying file $tempFile to $remoteDestPath")
+          val tempStream = use(new FileInputStream(tempFile))
+          if (!client.storeFile(remoteDestPath, tempStream))
+            throw new IOException("Failed to upload file")
+          logger.debug(s"file $tempFile copied to $remoteDestPath")
+        }
+        tempFile.deleteOnExit()
       }
       case Delete => client => {
         logger.debug(s"Deleting file $remoteSourcePath")

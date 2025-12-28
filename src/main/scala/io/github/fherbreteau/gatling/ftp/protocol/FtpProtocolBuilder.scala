@@ -1,8 +1,9 @@
 package io.github.fherbreteau.gatling.ftp.protocol
 
-import io.gatling.internal.quicklens._
-import io.gatling.commons.model.Credentials
 import io.gatling.core.config.GatlingConfiguration
+import io.gatling.core.session.Expression
+import io.gatling.internal.quicklens._
+import io.github.fherbreteau.gatling.ftp.util.FtpHelper
 
 import java.nio.file.Path
 import scala.language.implicitConversions
@@ -19,7 +20,7 @@ final case class FtpProtocolBuilder(protocol: FtpProtocol) {
 
   def port(port: Int): FtpProtocolBuilder = this.modify(_.protocol.exchange.port).setTo(port)
 
-  def credentials(username: String, password: String): FtpProtocolBuilder = this.modify(_.protocol.exchange.credentials).setTo(Credentials(username, password))
+  def credentials(username: Expression[String], password: Expression[String]): FtpProtocolBuilder = this.modify(_.protocol.credentials).setTo(FtpHelper.buildCredentials(username, password))
 
   def passiveMode(passive: Boolean): FtpProtocolBuilder = this.modify(_.protocol.exchange.passiveMode).setTo(passive)
 
