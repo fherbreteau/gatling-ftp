@@ -16,21 +16,20 @@ class FtpSimulationScala extends Simulation {
     .port(2121)
     .credentials("#{username}", "#{password}")
     .passiveMode(true)
-    .protocolLogging(true)
     .localPath(Paths.get("./src/test/resources/data"))
-    .remotePath("/ftp/user")
+    .remotePath(".")
 
   // Load credentials from CSV
   val credentialsFeeder: FeederBuilder = csv("credential.csv").circular
 
   val source = "file_to_upload.txt"
-  val destination = "file_copied.txt";
+  val destination = "file_copied.txt"
 
 
   // Define the test scenario
   val scn: ScenarioBuilder = scenario("FTP Scenario")
+    .feed(credentialsFeeder)
     .exec(
-      feed(credentialsFeeder),
       exec(ftp("Upload a file").upload(source)),
       exec(ftp("Copy remote file").copy(source, destination)),
       exec(ftp("Delete remote file").delete(source)),
@@ -39,5 +38,5 @@ class FtpSimulationScala extends Simulation {
     )
 
   // Set up the simulation with open workload model
-  setUp(scn.inject(atOnceUsers(1)).protocols(ftpProtocol))
+  setUp(scn.inject(atOnceUsers(4)).protocols(ftpProtocol))
 }

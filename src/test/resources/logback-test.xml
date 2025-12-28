@@ -8,8 +8,8 @@
         <immediateFlush>false</immediateFlush>
     </appender>
 
-    <logger name="org.apache.sshd" level="TRACE" />
-    <logger name="io.github.fherbreteau" level="TRACE" />
+    <logger name="org.apache.commons.net.ftp" level="TRACE" />
+    <logger name="io.github.fherbreteau" level="WARN" />
 
     <root level="ERROR">
         <appender-ref ref="CONSOLE" />

@@ -18,9 +18,8 @@ public class FtpSimulationJava extends Simulation {
             .port(2121)
             .credentials("#{username}", "#{password}")
             .passiveMode(true)
-            .protocolLogging(true)
             .localPath(Paths.get("./src/test/resources/data"))
-            .remotePath("/tmp");
+            .remotePath(".");
 
     // Load credentials from CSV
     FeederBuilder<String> credentialsFeeder = csv("credential.csv").circular();
@@ -30,8 +29,8 @@ public class FtpSimulationJava extends Simulation {
 
     // Define the test scenario
     ScenarioBuilder scn = scenario("FTP Scenario")
+            .feed(credentialsFeeder)
             .exec(
-                    feed(credentialsFeeder),
                     exec(ftp("Upload a file").upload(source)),
                     exec(ftp("Copy remote file").copy(source, destination)),
                     exec(ftp("Delete remote file").delete(source)),
@@ -41,6 +40,6 @@ public class FtpSimulationJava extends Simulation {
 
     {
         // Set up the simulation with open workload model
-        setUp(scn.injectOpen(atOnceUsers(1)).protocols(ftpProtocol));
+        setUp(scn.injectOpen(atOnceUsers(4)).protocols(ftpProtocol));
     }
 }

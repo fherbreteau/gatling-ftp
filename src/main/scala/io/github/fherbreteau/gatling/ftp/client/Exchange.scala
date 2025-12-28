@@ -1,7 +1,6 @@
 package io.github.fherbreteau.gatling.ftp.client
 
 import com.typesafe.scalalogging.{Logger, StrictLogging}
-import io.gatling.commons.model.Credentials
 import io.gatling.commons.stats.{KO, OK}
 import io.gatling.core.CoreComponents
 import io.gatling.core.controller.throttle.Throttler
@@ -23,8 +22,12 @@ object Exchange  {
         logger.debug(message)
       }
     }
-    override def flush(): Unit = {}
-    override def close(): Unit = {}
+    override def flush(): Unit = {
+      // Nothing to do here
+    }
+    override def close(): Unit = {
+      // Nothing to do here
+    }
   }
 
   def apply(server: String, port: Int, passiveMode: Boolean = false, protocolLogging: Boolean = false): Exchange =
@@ -75,6 +78,7 @@ final case class Exchange(factory: FtpClientFactory,
         }
 
         val credentials = transaction.ftpOperation.ftpProtocol.credential(transaction.session)
+        logger.debug(s"User ${credentials.username} logged in scenario=${transaction.scenario} userId=${transaction.userId}")
         if (!client.login(credentials.username, credentials.password))
           throw new IOException("Failed to login to server")
 
