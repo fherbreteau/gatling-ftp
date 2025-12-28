@@ -14,6 +14,7 @@
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- Maven plugins version -->
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
@@ -24,10 +25,12 @@
         <maven-release-plugin.version>3.2.0</maven-release-plugin.version>
         <maven-gatling-plugin.version>4.20.8</maven-gatling-plugin.version>
 
+        <!-- Dependencies Versions -->
         <gatling.version>3.14.9</gatling.version>
         <commons.net.version>3.12.0</commons.net.version>
         <jakarta.annotation.version>3.0.0</jakarta.annotation.version>
 
+        <!-- Sonar Properties -->
         <sonar.organization>fherbreteau</sonar.organization>
         <sonar.projectKey>fherbreteau_gatling-ftp</sonar.projectKey>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -75,6 +78,15 @@
                             <goal>add-source</goal>
                             <goal>compile</goal>
                         </goals>
+                        <configuration>
+                            <args>
+                                <arg>-deprecation</arg>
+                                <arg>-feature</arg>
+                                <arg>-unchecked</arg>
+                                <arg>-language:implicitConversions</arg>
+                                <arg>-language:postfixOps</arg>
+                            </args>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>scala-test-compile</id>
@@ -82,6 +94,15 @@
                         <goals>
                             <goal>testCompile</goal>
                         </goals>
+                        <configuration>
+                            <args>
+                                <arg>-deprecation</arg>
+                                <arg>-feature</arg>
+                                <arg>-unchecked</arg>
+                                <arg>-language:implicitConversions</arg>
+                                <arg>-language:postfixOps</arg>
+                            </args>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -115,7 +136,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
-                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <nexusUrl>https://ossrh-staging-api.central.sonatype.com/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
