@@ -7,6 +7,6 @@ services:
     environment:
       - USERS=user|password
     ports:
-      - "21:21"
+      - "21:2121"
       - "30000-30009:30000-30009"  # passive data ports
     restart: unless-stopped

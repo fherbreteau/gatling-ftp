@@ -1,6 +1,6 @@
 package io.github.fherbreteau.gatling.ftp.client
 
-import com.typesafe.scalalogging.StrictLogging
+import com.typesafe.scalalogging.{Logger, StrictLogging}
 import io.gatling.commons.model.Credentials
 import io.gatling.commons.stats.{KO, OK}
 import io.gatling.core.controller.throttle.Throttler
@@ -10,11 +10,22 @@ import io.gatling.core.stats.StatsEngine
 import io.github.fherbreteau.gatling.ftp.client.result.{FtpFailure, FtpResponse, FtpResult}
 import org.apache.commons.net.PrintCommandListener
 
-import java.io.{IOException, PrintWriter}
+import java.io.{IOException, PrintWriter, Writer}
 import java.util.concurrent.{Executor, Executors}
 import scala.util.control.NonFatal
 
 object Exchange  {
+
+  private class DebugLoggerWriter(logger: Logger) extends Writer {
+    override def write(cbuf: Array[Char], off: Int, len: Int): Unit = {
+      val message = new String(cbuf, off, len).trim
+      if (message.nonEmpty) {
+        logger.debug(message)
+      }
+    }
+    override def flush(): Unit = {}
+    override def close(): Unit = {}
+  }
 
   def apply(server: String, port: Int, credentials: Credentials, passiveMode: Boolean = false, protocolLogging: Boolean = false): Exchange =
     Exchange(
@@ -62,7 +73,7 @@ final case class Exchange(factory: FtpClientFactory,
 
         if (protocolLogging) {
           // Mask login details in logs (2nd parameter = suppressLogin)
-          client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true))
+          client.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(new Exchange.DebugLoggerWriter(logger)), true))
         }
 
         if (!client.login(credentials.username, credentials.password))
