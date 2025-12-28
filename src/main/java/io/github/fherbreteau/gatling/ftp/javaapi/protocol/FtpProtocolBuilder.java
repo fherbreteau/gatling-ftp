@@ -1,5 +1,7 @@
 package io.github.fherbreteau.gatling.ftp.javaapi.protocol;
 
+import static io.gatling.javaapi.core.internal.Expressions.toStringExpression;
+
 import io.gatling.core.protocol.Protocol;
 import io.gatling.javaapi.core.ProtocolBuilder;
 
@@ -22,7 +24,7 @@ public class FtpProtocolBuilder implements ProtocolBuilder {
     }
 
     public FtpProtocolBuilder credentials(String username, String password) {
-        return new FtpProtocolBuilder(wrapped.credentials(username, password));
+        return new FtpProtocolBuilder(wrapped.credentials(toStringExpression(username), toStringExpression(password)));
     }
 
     public FtpProtocolBuilder passiveMode(boolean passive) {
@@ -53,8 +55,8 @@ public class FtpProtocolBuilder implements ProtocolBuilder {
         return new FtpProtocolBuilder(wrapped.remoteSourcePath(sourcePath));
     }
 
-    public FtpProtocolBuilder remoteDestinationPath(String destpath) {
-        return new FtpProtocolBuilder(wrapped.remoteDestinationPath(destpath));
+    public FtpProtocolBuilder remoteDestinationPath(String destPath) {
+        return new FtpProtocolBuilder(wrapped.remoteDestinationPath(destPath));
     }
 
     @Override

@@ -10,6 +10,7 @@
 
     <logger name="org.apache.commons.net.ftp" level="TRACE" />
     <logger name="io.github.fherbreteau" level="WARN" />
+
     <root level="ERROR">
         <appender-ref ref="CONSOLE" />
     </root>
