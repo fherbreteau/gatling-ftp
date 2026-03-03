@@ -32,7 +32,6 @@ class FtpSimulationScala extends Simulation {
     .feed(credentialsFeeder)
     .exec(
       exec(ftp("List remote directory").ls(remotePath)),
-      exec(ftp("List files").list(destination)),
       exec(ftp("Upload a file").upload(source)),
       exec(ftp("Copy remote file").copy(source, destination)),
       exec(ftp("Delete remote file").delete(source)),
