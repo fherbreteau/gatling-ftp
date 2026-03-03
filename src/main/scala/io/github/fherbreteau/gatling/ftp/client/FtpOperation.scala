@@ -36,9 +36,10 @@ final case class FtpOperation(operationName: String,
     val remoteDestPath = ftpProtocol.remoteDestination(definition.destination)
     definition.action match {
       case Ls => client => {
-        logger.debug(s"Listing files in directory $remoteDestPath")
-        if (!client.listFiles(remoteDestPath))
+        logger.debug(s"Listing files in directory $remoteSourcePath")
+        if (!client.listFiles(remoteSourcePath)) {
           throw new IOException("Failed to list files")
+        }
       }
       case Move => client => {
         logger.debug(s"Moving file $remoteSourcePath to $remoteDestPath")

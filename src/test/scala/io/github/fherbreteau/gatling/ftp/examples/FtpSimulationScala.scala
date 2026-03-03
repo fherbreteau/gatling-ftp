@@ -22,6 +22,7 @@ class FtpSimulationScala extends Simulation {
   // Load credentials from CSV
   val credentialsFeeder: FeederBuilder = csv("credential.csv").circular
 
+  val remotePath = "."
   val source = "file_to_upload.txt"
   val destination = "file_copied.txt"
 
@@ -30,6 +31,8 @@ class FtpSimulationScala extends Simulation {
   val scn: ScenarioBuilder = scenario("FTP Scenario")
     .feed(credentialsFeeder)
     .exec(
+      exec(ftp("List remote directory").ls(remotePath)),
+      exec(ftp("List files").list(destination)),
       exec(ftp("Upload a file").upload(source)),
       exec(ftp("Copy remote file").copy(source, destination)),
       exec(ftp("Delete remote file").delete(source)),
