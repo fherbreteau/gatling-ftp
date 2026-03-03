@@ -26,6 +26,7 @@ public class FtpSimulationJava extends Simulation {
 
     String source = "file_to_upload.txt";
     String destination = "file_copied.txt";
+    String folder = "folder";
 
     // Define the test scenario
     ScenarioBuilder scn = scenario("FTP Scenario")
@@ -35,7 +36,10 @@ public class FtpSimulationJava extends Simulation {
                     exec(ftp("Copy remote file").copy(source, destination)),
                     exec(ftp("Delete remote file").delete(source)),
                     exec(ftp("Move remote file").move(destination, source)),
-                    exec(ftp("Delete remote file").delete(source))
+                    exec(ftp("Download remote file").download(source)),
+                    exec(ftp("Delete remote file").delete(source)),
+                    exec(ftp("Create a remote dir").mkdir(folder)),
+                    exec(ftp("Delete a remote dir").rmdir(folder))
             );
 
     {
