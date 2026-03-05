@@ -25,7 +25,7 @@ class FtpSimulationScala extends Simulation {
   val remotePath = "."
   val source = "file_to_upload.txt"
   val destination = "file_copied.txt"
-
+  val folder = "folder"
 
   // Define the test scenario
   val scn: ScenarioBuilder = scenario("FTP Scenario")
@@ -36,7 +36,10 @@ class FtpSimulationScala extends Simulation {
       exec(ftp("Copy remote file").copy(source, destination)),
       exec(ftp("Delete remote file").delete(source)),
       exec(ftp("Move remote file").move(destination, source)),
-      exec(ftp("Delete remote file").delete(source))
+      exec(ftp("Download remote file").download(source)),
+      exec(ftp("Delete remote file").delete(source)),
+      exec(ftp("Create a remote dir").mkdir(folder)),
+      exec(ftp("Delete a remote dir").rmdir(folder))
     )
 
   // Set up the simulation with open workload model

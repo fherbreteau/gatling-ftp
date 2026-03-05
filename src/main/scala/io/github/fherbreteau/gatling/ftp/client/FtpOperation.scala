@@ -88,13 +88,13 @@ final case class FtpOperation(operationName: String,
         }
       }
       case Mkdir => client => {
-        logger.debug(s"Create remote directory $remoteDestPath")
-        if (!client.makeDirectory(remoteDestPath))
+        logger.debug(s"Create remote directory $remoteSourcePath")
+        if (!client.makeDirectory(remoteSourcePath))
           throw new IOException("Failed to create directory")
       }
       case RmDir => client => {
-        logger.debug(s"Removing remote directory $remoteDestPath")
-        if (!client.removeDirectory(remoteDestPath))
+        logger.debug(s"Removing remote directory $remoteSourcePath")
+        if (!client.removeDirectory(remoteSourcePath))
           throw new IOException("Failed to remove directory")
 
       }
