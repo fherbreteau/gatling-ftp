@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    if: github.repository == 'fherbreteau/gatling-sftp'
+    if: github.repository == 'fherbreteau/gatling-ftp'
     runs-on: ubuntu-latest
 
     steps:
