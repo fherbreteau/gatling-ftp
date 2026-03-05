@@ -5,12 +5,12 @@ permissions:
 on:
   push:
     tags:
-      - "*"
+      - '*'
 
 jobs:
   create-release:
     runs-on: ubuntu-latest
-    if: github.repository == 'fherbreteau/gatling-sftp'
+    if: github.repository == 'fherbreteau/gatling-ftp'
 
     steps:
       - name: Checkout Code
