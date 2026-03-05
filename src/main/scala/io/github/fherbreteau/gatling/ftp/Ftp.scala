@@ -7,6 +7,8 @@ import io.github.fherbreteau.gatling.ftp.client.FtpActions._
 
 case class Ftp(operationName: Expression[String]) {
 
+  def ls(directory: Expression[String]): FtpActionBuilder = action(directory, EmptyStringExpressionSuccess, Ls)
+
   def mkdir(directory: Expression[String]): FtpActionBuilder = action(directory, EmptyStringExpressionSuccess, Mkdir)
 
   def move(source: Expression[String], destination: Expression[String]): FtpActionBuilder = action(source, destination, Move)

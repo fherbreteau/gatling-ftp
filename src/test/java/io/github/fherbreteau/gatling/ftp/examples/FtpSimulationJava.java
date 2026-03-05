@@ -24,6 +24,7 @@ public class FtpSimulationJava extends Simulation {
     // Load credentials from CSV
     FeederBuilder<String> credentialsFeeder = csv("credential.csv").circular();
 
+    String remotePath = ".";
     String source = "file_to_upload.txt";
     String destination = "file_copied.txt";
 
@@ -31,6 +32,7 @@ public class FtpSimulationJava extends Simulation {
     ScenarioBuilder scn = scenario("FTP Scenario")
             .feed(credentialsFeeder)
             .exec(
+                    exec(ftp("List remote directory").ls(remotePath)),
                     exec(ftp("Upload a file").upload(source)),
                     exec(ftp("Copy remote file").copy(source, destination)),
                     exec(ftp("Delete remote file").delete(source)),

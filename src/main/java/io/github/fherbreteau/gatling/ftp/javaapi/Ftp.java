@@ -23,6 +23,24 @@ public class Ftp {
     }
 
     /**
+     * Define a list command.
+     * @param directory the directory to list, expressed as a Gatling Expression Language String
+     * @return a new instance of SftpActionBuilder
+     */
+    public FtpActionBuilder ls(@Nonnull String directory) {
+        return new FtpActionBuilder(new io.github.fherbreteau.gatling.ftp.Ftp(name).ls(Expressions.toStringExpression(directory)));
+    }
+
+    /**
+     * Define a list command.
+     * @param directory the directory to list, expressed as a function
+     * @return a new instance of SftpActionBuilder
+     */
+    public FtpActionBuilder ls(@Nonnull Function<io.gatling.javaapi.core.Session, String> directory) {
+        return new FtpActionBuilder(new io.github.fherbreteau.gatling.ftp.Ftp(name).ls(Expressions.javaFunctionToExpression(directory)));
+    }
+
+    /**
      * Define a mkdir command.
      * @param directory the directory to create, expressed as a Gatling Expression Language String
      * @return a new instance of SftpActionBuilder

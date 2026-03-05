@@ -3,9 +3,9 @@ package io.github.fherbreteau.gatling.ftp.client
 import com.typesafe.scalalogging.StrictLogging
 import io.gatling.commons.validation.Validation
 import io.gatling.core.session.{Expression, Session}
-import io.github.fherbreteau.gatling.ftp.client.FtpActions.{Action, Copy, Delete, Download, Mkdir, Move, RmDir, Upload}
+import io.github.fherbreteau.gatling.ftp.client.FtpActions.{Action, Ls, Copy, Delete, Download, Mkdir, Move, RmDir, Upload}
 import io.github.fherbreteau.gatling.ftp.protocol.FtpProtocol
-import org.apache.commons.net.ftp.FTPClient
+import org.apache.commons.net.ftp.{FTPClient, FTPReply}
 
 import java.io.{File, FileInputStream, FileOutputStream, IOException}
 import java.nio.file.Files
@@ -35,6 +35,13 @@ final case class FtpOperation(operationName: String,
     val remoteSourcePath = ftpProtocol.remoteSource(definition.source)
     val remoteDestPath = ftpProtocol.remoteDestination(definition.destination)
     definition.action match {
+      case Ls => client => {
+        logger.debug(s"Listing files in directory $remoteSourcePath")
+        client.listFiles(remoteSourcePath)
+        if (!FTPReply.isPositiveCompletion(client.getReplyCode)) {
+          throw new IOException("Failed to list files")
+        }
+      }
       case Move => client => {
         logger.debug(s"Moving file $remoteSourcePath to $remoteDestPath")
         if (!client.rename(remoteSourcePath, remoteDestPath)) {
