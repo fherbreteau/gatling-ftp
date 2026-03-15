@@ -1,13 +1,14 @@
 package io.github.fherbreteau.gatling.ftp
 
 import io.gatling.core.session.{EmptyStringExpressionSuccess, Expression}
-import io.github.fherbreteau.gatling.ftp
 import io.github.fherbreteau.gatling.ftp.action.FtpActionBuilder
 import io.github.fherbreteau.gatling.ftp.client.FtpActions._
 
 case class Ftp(operationName: Expression[String]) {
 
   def ls(directory: Expression[String]): FtpActionBuilder = action(directory, EmptyStringExpressionSuccess, Ls)
+
+  def chdir(directory: Expression[String]): FtpActionBuilder = action(directory, EmptyStringExpressionSuccess, Cd)
 
   def mkdir(directory: Expression[String]): FtpActionBuilder = action(directory, EmptyStringExpressionSuccess, Mkdir)
 

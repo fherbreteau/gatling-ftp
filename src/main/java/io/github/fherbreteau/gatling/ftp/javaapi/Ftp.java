@@ -41,6 +41,24 @@ public class Ftp {
     }
 
     /**
+     * Define a change directory command.
+     * @param directory the directory to navigate to, expressed as a function
+     * @return a new instance of SftpActionBuilder
+     */
+    public FtpActionBuilder chdir(@Nonnull Function<io.gatling.javaapi.core.Session, String> directory) {
+        return new FtpActionBuilder(new io.github.fherbreteau.gatling.ftp.Ftp(name).chdir(Expressions.javaFunctionToExpression(directory)));
+    }
+
+    /**
+     * Define a change directory command.
+     * @param directory the directory to navigate to, expressed as a Gatling Expression Language String
+     * @return a new instance of SftpActionBuilder
+     */
+    public FtpActionBuilder chdir(@Nonnull String directory) {
+        return new FtpActionBuilder(new io.github.fherbreteau.gatling.ftp.Ftp(name).chdir(Expressions.toStringExpression(directory)));
+    }
+
+    /**
      * Define a mkdir command.
      * @param directory the directory to create, expressed as a Gatling Expression Language String
      * @return a new instance of FtpActionBuilder

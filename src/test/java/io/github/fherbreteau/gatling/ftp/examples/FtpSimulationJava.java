@@ -41,6 +41,9 @@ public class FtpSimulationJava extends Simulation {
                     exec(ftp("Download remote file").download(source)),
                     exec(ftp("Delete remote file").delete(source)),
                     exec(ftp("Create a remote dir").mkdir(folder)),
+                    exec(ftp("Navigate to remote folder").chdir(folder)),
+                    exec(ftp("Upload a file").upload(source)),
+                    exec(ftp("Navigate to parent folder").chdir(folder)),
                     exec(ftp("Delete a remote dir").rmdir(folder))
             );
 
