@@ -44,7 +44,7 @@ final case class FtpOperation(operationName: String,
       }
       case Cd => client => {
         logger.debug(s"Changing current dir to $remoteSourcePath")
-        if ("..".equals(remoteDestPath)) {
+        if ("/..".equals(remoteSourcePath)) {
           if (!client.changeToParentDirectory()) {
             throw new IOException("Failed to change to parent directory")
           }

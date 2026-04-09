@@ -77,6 +77,38 @@ class FtpOperationSpec extends AnyFunSpec with Matchers with MockitoSugar with B
       }
     }
 
+    describe("ChDir") {
+      it("should call changeWorkingDirectory on the FTP client") {
+        val client = mock[FTPClient]
+        when(client.changeWorkingDirectory(any())).thenReturn(true)
+        val op = createOperation(Cd, source = "mydir")
+        op.build.apply(client)
+        verify(client).changeWorkingDirectory("/mydir")
+      }
+
+      it("should throw IOException when changing dir fails") {
+        val client = mock[FTPClient]
+        when(client.changeWorkingDirectory(any())).thenReturn(false)
+        val op = createOperation(Cd, source = "baddir")
+        a[java.io.IOException] should be thrownBy op.build.apply(client)
+      }
+
+      it("should call changeToParentDirectory on the FTP client") {
+        val client = mock[FTPClient]
+        when(client.changeToParentDirectory()).thenReturn(true)
+        val op = createOperation(Cd, source = "..")
+        op.build.apply(client)
+        verify(client).changeToParentDirectory()
+      }
+
+      it("should throw IOException when going to parent fails") {
+        val client = mock[FTPClient]
+        when(client.changeToParentDirectory()).thenReturn(false)
+        val op = createOperation(Cd, source = "..")
+        a[java.io.IOException] should be thrownBy op.build.apply(client)
+      }
+    }
+
     describe("Move") {
       it("should call rename on the FTP client") {
         val client = mock[FTPClient]

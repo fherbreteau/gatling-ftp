@@ -123,7 +123,7 @@ class FtpIntegrationSpec extends AnyFunSpec with Matchers with BeforeAndAfterAll
       }
     }
 
-    describe("Ls") {
+    describe("Ls and Cd") {
       it("should list directory contents without error") {
         ftpServer.getFileSystem.add(new FileEntry("/data/file1.txt", "content1"))
         ftpServer.getFileSystem.add(new FileEntry("/data/file2.txt", "content2"))
@@ -134,6 +134,26 @@ class FtpIntegrationSpec extends AnyFunSpec with Matchers with BeforeAndAfterAll
             createProtocol(remoteSourcePath = Some("")), throttled = false
           )
           noException should be thrownBy op.build.apply(client)
+        }
+      }
+
+      it("should change current directory without error") {
+        withFtpClient { client =>
+          val op = FtpOperation(
+            OperationDef("cd-test", "data", "", Cd),
+            createProtocol(remoteSourcePath = Some("")), throttled = false
+          )
+          noException should be thrownBy op.build.apply(client)
+        }
+      }
+
+      it("should fail to go to parent directory") {
+        withFtpClient { client =>
+          val op = FtpOperation(
+            OperationDef("cd-test", "..", "", Cd),
+            createProtocol(remoteSourcePath = Some("")), throttled = false
+          )
+          a[java.io.IOException] should be thrownBy op.build.apply(client)
         }
       }
     }

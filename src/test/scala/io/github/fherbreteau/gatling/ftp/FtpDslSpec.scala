@@ -18,6 +18,11 @@ class FtpDslSpec extends AnyFunSpec with Matchers {
       builder.action shouldBe FtpActions.Ls
     }
 
+    it("chdir should create action bulder with Cd action") {
+      val builder = ftpDsl.chdir(constExpr("dir"))
+      builder.action shouldBe FtpActions.Cd
+    }
+
     it("mkdir should create action builder with Mkdir action") {
       val builder = ftpDsl.mkdir(constExpr("dir"))
       builder.action shouldBe FtpActions.Mkdir
