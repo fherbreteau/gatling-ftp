@@ -1,15 +1,16 @@
-# Plugin for support performance testing with FTP in Gatling (3.9.x)
+# Plugin for FTP performance testing in Gatling (3.15.x)
 
 ## Getting Started
 
-Plugin is currently available for Scala 2.12.
+This plugin is currently available for Scala 2.13.
 
-You may add plugin as dependency in project with your tests. Write this to your build.sbt:
+Add the plugin as a dependency in your test project. In your `build.sbt`:
 
-``` scala
-libraryDependencies += "io.github.fherbreteau" %% "gatling-ftp" % <version> % Test
-``` 
+```scala
+libraryDependencies += "io.github.fherbreteau" %% "gatling-ftp" % "<version>" % Test
+```
 
 ## Example Scenarios
 
-See src/test/
+- **Scala** -- [Sample Simulations](src/test/scala/io/github/fherbreteau/gatling/ftp/examples)
+- **Java** -- [Sample Simulations](src/test/java/io/github/fherbreteau/gatling/ftp/examples)
