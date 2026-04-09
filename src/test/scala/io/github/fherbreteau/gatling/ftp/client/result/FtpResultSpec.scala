@@ -1,8 +1,7 @@
 package io.github.fherbreteau.gatling.ftp.client.result
 
 import io.gatling.commons.stats.{KO, OK}
-import io.github.fherbreteau.gatling.ftp.client.OperationDef
-import io.github.fherbreteau.gatling.ftp.client.FtpActions
+import io.github.fherbreteau.gatling.ftp.client.{FtpActions, OperationDef}
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 

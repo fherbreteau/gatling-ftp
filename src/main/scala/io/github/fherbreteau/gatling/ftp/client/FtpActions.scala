@@ -4,5 +4,5 @@ object FtpActions extends Enumeration {
 
   type Action = Value
 
-  val Ls, Copy, Move, Delete, Upload, Download, Mkdir, RmDir = Value
+  val Ls, Cd, Copy, Move, Delete, Upload, Download, Mkdir, RmDir = Value
 }

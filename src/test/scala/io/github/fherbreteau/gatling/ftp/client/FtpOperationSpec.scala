@@ -6,12 +6,12 @@ import io.github.fherbreteau.gatling.ftp.protocol.FtpProtocol
 import org.apache.commons.net.ftp.{FTPClient, FTPReply}
 import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.Mockito.{verify, when}
+import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.BeforeAndAfterAll
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, OutputStream}
+import java.io.OutputStream
 import java.nio.file.{Files, Path}
 
 class FtpOperationSpec extends AnyFunSpec with Matchers with MockitoSugar with BeforeAndAfterAll {
@@ -73,6 +73,38 @@ class FtpOperationSpec extends AnyFunSpec with Matchers with MockitoSugar with B
         val client = mock[FTPClient]
         when(client.getReplyCode).thenReturn(FTPReply.FILE_ACTION_NOT_TAKEN)
         val op = createOperation(Ls, source = "baddir")
+        a[java.io.IOException] should be thrownBy op.build.apply(client)
+      }
+    }
+
+    describe("ChDir") {
+      it("should call changeWorkingDirectory on the FTP client") {
+        val client = mock[FTPClient]
+        when(client.changeWorkingDirectory(any())).thenReturn(true)
+        val op = createOperation(Cd, source = "mydir")
+        op.build.apply(client)
+        verify(client).changeWorkingDirectory("/mydir")
+      }
+
+      it("should throw IOException when changing dir fails") {
+        val client = mock[FTPClient]
+        when(client.changeWorkingDirectory(any())).thenReturn(false)
+        val op = createOperation(Cd, source = "baddir")
+        a[java.io.IOException] should be thrownBy op.build.apply(client)
+      }
+
+      it("should call changeToParentDirectory on the FTP client") {
+        val client = mock[FTPClient]
+        when(client.changeToParentDirectory()).thenReturn(true)
+        val op = createOperation(Cd, source = "..")
+        op.build.apply(client)
+        verify(client).changeToParentDirectory()
+      }
+
+      it("should throw IOException when going to parent fails") {
+        val client = mock[FTPClient]
+        when(client.changeToParentDirectory()).thenReturn(false)
+        val op = createOperation(Cd, source = "..")
         a[java.io.IOException] should be thrownBy op.build.apply(client)
       }
     }

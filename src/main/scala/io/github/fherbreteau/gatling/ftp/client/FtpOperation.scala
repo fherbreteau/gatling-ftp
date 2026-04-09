@@ -3,7 +3,7 @@ package io.github.fherbreteau.gatling.ftp.client
 import com.typesafe.scalalogging.StrictLogging
 import io.gatling.commons.validation.Validation
 import io.gatling.core.session.{Expression, Session}
-import io.github.fherbreteau.gatling.ftp.client.FtpActions.{Action, Ls, Copy, Delete, Download, Mkdir, Move, RmDir, Upload}
+import io.github.fherbreteau.gatling.ftp.client.FtpActions.{Action, Ls, Cd, Copy, Delete, Download, Mkdir, Move, RmDir, Upload}
 import io.github.fherbreteau.gatling.ftp.protocol.FtpProtocol
 import org.apache.commons.net.ftp.{FTPClient, FTPReply}
 
@@ -40,6 +40,17 @@ final case class FtpOperation(operationName: String,
         client.listFiles(remoteSourcePath)
         if (!FTPReply.isPositiveCompletion(client.getReplyCode)) {
           throw new IOException("Failed to list files")
+        }
+      }
+      case Cd => client => {
+        logger.debug(s"Changing current dir to $remoteSourcePath")
+        if ("/..".equals(remoteSourcePath)) {
+          if (!client.changeToParentDirectory()) {
+            throw new IOException("Failed to change to parent directory")
+          }
+        }
+        else if (!client.changeWorkingDirectory(remoteSourcePath)) {
+          throw new IOException("Failed to change directory")
         }
       }
       case Move => client => {

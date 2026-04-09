@@ -2,7 +2,6 @@ package io.github.fherbreteau.gatling.ftp.protocol
 
 import io.gatling.commons.model.Credentials
 import io.gatling.commons.validation.{Failure, Success}
-import io.gatling.core.session.Expression
 import io.github.fherbreteau.gatling.ftp.client.{Exchange, FtpClientFactory}
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
