@@ -6,12 +6,12 @@ import io.github.fherbreteau.gatling.ftp.protocol.FtpProtocol
 import org.apache.commons.net.ftp.{FTPClient, FTPReply}
 import org.mockito.ArgumentMatchers.{any, anyString}
 import org.mockito.Mockito.{verify, when}
+import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.BeforeAndAfterAll
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, OutputStream}
+import java.io.OutputStream
 import java.nio.file.{Files, Path}
 
 class FtpOperationSpec extends AnyFunSpec with Matchers with MockitoSugar with BeforeAndAfterAll {

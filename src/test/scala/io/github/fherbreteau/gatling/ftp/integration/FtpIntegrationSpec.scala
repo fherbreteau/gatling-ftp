@@ -1,6 +1,6 @@
 package io.github.fherbreteau.gatling.ftp.integration
 
-import io.gatling.commons.validation.{Failure, Success}
+import io.gatling.commons.validation.Success
 import io.github.fherbreteau.gatling.ftp.client.FtpActions._
 import io.github.fherbreteau.gatling.ftp.client._
 import io.github.fherbreteau.gatling.ftp.protocol.FtpProtocol
