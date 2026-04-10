@@ -1,0 +1,56 @@
+package io.github.fherbreteau.gatling.ftp.examples
+
+import io.gatling.javaapi.core.CoreDsl.atOnceUsers
+import io.gatling.javaapi.core.CoreDsl.csv
+import io.gatling.javaapi.core.CoreDsl.exec
+import io.gatling.javaapi.core.CoreDsl.scenario
+import io.gatling.javaapi.core.FeederBuilder
+import io.gatling.javaapi.core.ScenarioBuilder
+import io.gatling.javaapi.core.Simulation
+import io.github.fherbreteau.gatling.ftp.javaapi.FtpDsl.ftp
+import io.github.fherbreteau.gatling.ftp.javaapi.protocol.FtpProtocolBuilder
+import java.nio.file.Paths
+
+class FtpSimulationKotlin : Simulation() {
+    // Set up Ftp protocol with user credential
+    val ftpProtocol: FtpProtocolBuilder = ftp
+        .server("localhost")
+        .port(2121)
+        .credentials("#{username}", "#{password}")
+        .passiveMode(true)
+        .localPath(Paths.get("./src/test/resources/data"))
+        .remotePath(".")
+
+
+    // Load credentials from CSV
+    val credentialsFeeder: FeederBuilder<String> = csv("credential.csv").circular()
+
+    val remotePath = "."
+    val source = "file_to_upload.txt"
+    val destination = "file_copied.txt"
+    val folder = "folder"
+
+    // Define the test scenario
+    val scn: ScenarioBuilder = scenario("FTP Scenario")
+        .feed(credentialsFeeder)
+        .exec(
+            exec(ftp("List remote directory").ls(remotePath)),
+            exec(ftp("Upload a file").upload(source)),
+            exec(ftp("Copy remote file").copy(source, destination)),
+            exec(ftp("Delete remote file").delete(source)),
+            exec(ftp("Move remote file").move(destination, source)),
+            exec(ftp("Download remote file").download(source)),
+            exec(ftp("Delete remote file").delete(source)),
+            exec(ftp("Create a remote dir").mkdir(folder)),
+            exec(ftp("Navigate to remote folder").chdir(folder)),
+            exec(ftp("Upload a file").upload(source)),
+            exec(ftp("Navigate to parent folder").chdir("..")),
+            exec(ftp("Delete a remote dir").rmdir(folder))
+        )
+
+    init {
+        // Set up the simulation with open workload model
+        setUp(scn.injectOpen(atOnceUsers(4)).protocols(ftpProtocol))
+    }
+
+}
