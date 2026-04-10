@@ -36,14 +36,15 @@ Write this to your dependencies block in your `pom.xml`:
 
 Write this to your dependencies block in your `build.gradle`:
 
-```java
-gatling "io.github.fherbreteau:gatling-ftp:<version>"
+```kotlin
+gatling("io.github.fherbreteau:gatling-ftp:<version>")
 ```
 
 ## Example Scenarios
 
 - **Scala** -- [Sample Simulations](src/test/scala/io/github/fherbreteau/gatling/ftp/examples)
 - **Java** -- [Sample Simulations](src/test/java/io/github/fherbreteau/gatling/ftp/examples)
+- **Kotlin** -- [Sample Simulations](src/test/kotlin/io/github/fherbreteau/gatling/ftp/examples)
 
 ## Testing
 
