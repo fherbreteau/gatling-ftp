@@ -38,7 +38,7 @@
         <jakarta.annotation.version>3.0.0</jakarta.annotation.version>
 
         <!-- Test Dependencies Versions -->
-        <junit-jupiter.version>6.0.3</junit-jupiter.version>
+        <junit-jupiter.version>6.1.0</junit-jupiter.version>
         <assertj.version>3.27.7</assertj.version>
         <scalatest.version>3.2.20</scalatest.version>
         <scalatestplus-mockito.version>3.2.18.0</scalatestplus-mockito.version>
